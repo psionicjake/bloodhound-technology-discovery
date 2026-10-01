@@ -49,10 +49,49 @@ TLS certificates are verified and redirects are rejected.
 Detection searches string property values (including nested lists), graph display
 labels, and node kinds, case-insensitively. This covers names, descriptions,
 service principal names, and application URLs when those fields are collected.
-Defaults cover ServiceNow, Azure/Entra ID, Veeam (also the spelling Veam),
-CrowdStrike, Ping Identity, XSOAR/Demisto, CyberArk, Varonis, Tanium, and AWS.
 Azure `AZ…` node kinds and AWS-prefixed node kinds also count as platform evidence.
 Generic words such as `ping` and `falcon` alone do not trigger matches.
+
+## Supported technologies
+
+Defaults cover all 27 technologies below. Aliases map to the same output name.
+
+| Output name | Example evidence or aliases |
+| --- | --- |
+| ServiceNow | ServiceNow, Service Now |
+| Azure/Entra ID | Azure, Entra ID, Azure AD, Azure node kinds |
+| Veeam | Veeam, Veam |
+| CrowdStrike | CrowdStrike, Crowd Strike |
+| Ping Identity | Ping Identity, PingFederate, PingAccess, PingOne, PingDirectory |
+| XSOAR | XSOAR, Demisto |
+| CyberArk | CyberArk, Cyber Ark |
+| Varonis | Varonis |
+| Tanium | Tanium |
+| AWS | AWS, Amazon Web Services, AWS ARNs, amazonaws.com, AWS node kinds |
+| Microsoft SQL Server (MSSQL) | Microsoft SQL Server, SQL Server, MSSQL, MSSQLSvc SPNs |
+| Oracle | Oracle |
+| System Center Configuration Manager (SCCM) | System Center Configuration Manager, SCCM |
+| BeyondTrust | BeyondTrust, Beyond Trust, Bomgar |
+| Microsoft Intune | Intune |
+| Citrix | Citrix |
+| Okta | Okta |
+| Active Directory Federation Services (AD FS) | Active Directory Federation Services, AD FS, ADFS |
+| VMware | VMware, vCenter, vSphere |
+| Splunk | Splunk |
+| Tenable Nessus | Nessus |
+| Microsoft Exchange on-premises | Exchange Server, MSExchange service names, Exchange AD groups, Exchange configuration DN |
+| SAP | SAP, SAP01, svc_sap |
+| SolarWinds | SolarWinds, Solar Winds |
+| SailPoint | SailPoint, Sail Point |
+| Palo Alto Networks | Palo Alto, PaloAlto, PAN-OS |
+| Nutanix | Nutanix |
+
+Short abbreviations such as SAP, SCCM, and ADFS require letter boundaries, while
+allowing underscores and numeric host suffixes. Generic names such as Orion,
+Prism, PAN, or SQL alone do not count as product evidence. For on-premises
+Exchange, explicit server/service names, relevant AD group names, or its
+configuration DN count as evidence; `Microsoft Exchange` or `Exchange Online`
+alone does not. These indicators may also exist in hybrid or retired deployments.
 
 These are heuristic indicators from collected identity data, not proof of an
 active installation or a complete software inventory. References to retired
@@ -68,7 +107,7 @@ Pass `--rules rules.json` to extend or replace the patterns for named technologi
 ```json
 {
   "CrowdStrike": ["crowd[\\s_-]*strike", "(?<![a-z0-9])csagent(?![a-z])"],
-  "Okta": ["okta"],
+  "Example Application": ["example[\\s_-]*application"],
   "Varonis": []
 }
 ```
