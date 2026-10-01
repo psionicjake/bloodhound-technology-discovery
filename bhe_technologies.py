@@ -30,6 +30,35 @@ DEFAULT_RULES = {
     "Tanium": [r"tanium"],
     "AWS": [r"(?<![a-z])aws(?![a-z])", r"amazon[\s_-]*web[\s_-]*services",
             r"amazonaws\.com", r"arn:aws(?:-[a-z-]+)?:"],
+    "Microsoft SQL Server (MSSQL)": [r"microsoft[\s_-]*sql[\s_-]*server",
+                                    r"(?<![a-z])sql[\s_-]*server(?![a-z])",
+                                    r"(?<![a-z])mssql(?:svc)?(?![a-z])"],
+    "Oracle": [r"oracle"],
+    "System Center Configuration Manager (SCCM)": [
+        r"system[\s_-]*center[\s_-]*configuration[\s_-]*manager",
+        r"(?<![a-z])sccm(?![a-z])"],
+    "BeyondTrust": [r"beyond[\s_-]*trust", r"bomgar"],
+    "Microsoft Intune": [r"intune"],
+    "Citrix": [r"citrix"],
+    "Okta": [r"okta"],
+    "Active Directory Federation Services (AD FS)": [
+        r"active[\s_-]*directory[\s_-]*federation[\s_-]*services",
+        r"(?<![a-z])ad[\s_-]*fs(?![a-z])"],
+    "VMware": [r"vmware", r"(?<![a-z])vcenter(?![a-z])", r"(?<![a-z])vsphere(?![a-z])"],
+    "Splunk": [r"splunk"],
+    "Tenable Nessus": [r"nessus", r"tenable[\s_-]+nessus"],
+    # Exchange Online names alone cannot establish on-premises Exchange evidence.
+    "Microsoft Exchange on-premises": [
+        r"(?<![a-z])exchange[\s_-]+server(?![a-z])",
+        r"(?<![a-z])(?:microsoft[\s_-]+)?exchange[\s_-]+on[\s_-]*prem(?:ises)?(?![a-z])",
+        r"(?<![a-z])msexchange[a-z0-9]*",
+        r"(?<![a-z])exchange[\s_-]+(?:trusted[\s_-]+subsystem|windows[\s_-]+permissions|servers)(?![a-z])",
+        r"cn=microsoft exchange,cn=services,"],
+    "SAP": [r"(?<![a-z])sap(?![a-z])"],
+    "SolarWinds": [r"solar[\s_-]*winds"],
+    "SailPoint": [r"sail[\s_-]*point"],
+    "Palo Alto Networks": [r"palo[\s_-]*alto(?:[\s_-]*networks)?", r"pan[\s_-]*os"],
+    "Nutanix": [r"nutanix"],
 }
 ENDPOINT = "/api/v2/graphs/cypher"
 
