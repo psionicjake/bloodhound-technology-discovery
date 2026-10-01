@@ -19,10 +19,47 @@ class DetectionTests(unittest.TestCase):
         names = ["svc_ServiceNow", "Azure AD Connect", "VEEAM01.corp.local",
                  "CrowdStrike Falcon", "PingFederate", "Demisto automation",
                  "CyberArk Vault", "Varonis service", "Tanium client",
-                 "https://signin.aws.amazon.com"]
+                 "https://signin.aws.amazon.com", "MSSQLSvc/sql01.corp.local:1433",
+                 "Oracle database", "SCCM01", "BeyondTrust", "Microsoft Intune",
+                 "Citrix", "Okta", "AD FS", "VMware", "Splunk", "Nessus",
+                 "Exchange Trusted Subsystem", "SAP01", "SolarWinds", "SailPoint",
+                 "Palo Alto Networks", "Nutanix"]
         result = bhe.detect_technologies((node(name) for name in names), bhe.load_rules())
         self.assertEqual(set(result), set(bhe.DEFAULT_RULES))
         self.assertEqual(result, sorted(result, key=str.casefold))
+
+    def test_added_product_aliases_individually(self):
+        cases = {
+            "Microsoft SQL Server (MSSQL)": ["Microsoft SQL Server", "SQL Server", "MSSQL",
+                                             "MSSQLSvc/sql01.corp.local:1433"],
+            "System Center Configuration Manager (SCCM)": [
+                "System Center Configuration Manager", "svc_SCCM", "SCCM01"],
+            "BeyondTrust": ["BeyondTrust", "Beyond Trust", "Bomgar"],
+            "Microsoft Intune": ["Microsoft Intune", "svc_Intune"],
+            "Active Directory Federation Services (AD FS)": [
+                "Active Directory Federation Services", "AD FS", "ADFS01", "svc_adfs"],
+            "VMware": ["VMware", "vCenter", "vSphere"],
+            "Tenable Nessus": ["Tenable Nessus", "Nessus01"],
+            "Microsoft Exchange on-premises": ["Microsoft Exchange Server", "Exchange on-premises",
+                "MSExchangeIS", "Exchange Trusted Subsystem", "Exchange Windows Permissions",
+                "Exchange Servers", "CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=corp,DC=local"],
+            "SAP": ["SAP", "SAP01", "svc_sap@corp.local"],
+            "Palo Alto Networks": ["Palo Alto Networks", "PaloAlto", "PAN-OS"],
+            "Oracle": ["Oracle"], "Citrix": ["Citrix"], "Okta": ["Okta"],
+            "Splunk": ["Splunk"], "SolarWinds": ["SolarWinds"],
+            "SailPoint": ["SailPoint"], "Nutanix": ["Nutanix"],
+        }
+        for expected, aliases in cases.items():
+            for alias in aliases:
+                with self.subTest(alias=alias):
+                    self.assertEqual(bhe.detect_technologies([node(description=alias)], bhe.load_rules()),
+                                     [expected])
+
+    def test_generic_words_and_exchange_online_do_not_match_added_products(self):
+        names = ["sapling", "ASAP", "SQL query", "configuration manager", "ad filesystem",
+                 "PAN team", "prism", "orion", "Exchange Online", "Microsoft Exchange Online",
+                 "exchange rate", "Microsoft Exchange", "Tenable cloud"]
+        self.assertEqual(bhe.detect_technologies([node(name) for name in names], bhe.load_rules()), [])
 
     def test_nested_properties_duplicates_and_word_boundaries(self):
         nodes = [node(description=[{"value": "svc_crowdstrike@corp"}]),
